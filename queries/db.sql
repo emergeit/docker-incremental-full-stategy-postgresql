@@ -1,11 +1,11 @@
-# Schema/Table Creation
+/*Schema/Table Creation*/
 DROP SCHEMA IF EXISTS source CASCADE;
 DROP SCHEMA IF EXISTS target CASCADE;
 CREATE SCHEMA source;
 CREATE SCHEMA target;
 ALTER DATABASE postgres SET timezone TO 'America/Sao_Paulo';
 
-# Trigger function
+/*Trigger function*/
 CREATE OR REPLACE FUNCTION updated_at_function()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -14,7 +14,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-# Table creation - Source
+/*Table creation - Source*/
 CREATE TABLE IF NOT EXISTS source.tb_radar (
     id serial,
     uuid varchar(128),
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS source.tb_radar (
     CONSTRAINT tb_radar_pk PRIMARY KEY (id)
 );
 
-# Table creation - Target
+/*Table creation - Target*/
 CREATE TABLE IF NOT EXISTS target.tb_radar (
     id serial,
     uuid varchar(128),
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS target.tb_radar (
     CONSTRAINT tb_radar_pk PRIMARY KEY (id)
 );
 
-# Triggers to upsert with updated_at
+/*Triggers to upsert with updated_at*/
 CREATE TRIGGER updated_at_trigger_source BEFORE UPDATE
 ON source.tb_radar FOR EACH ROW EXECUTE PROCEDURE 
 updated_at_function();
