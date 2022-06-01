@@ -35,7 +35,7 @@ python3 /app/code/feedDb.py
 	------ | -------
 	<b>ID</b> | The table unique ID, incremental;
 	<b>UUID</b> | The UUID of the record;
-	<b>RADAR_ID</b> | The ID of the TRAFFIC RADAR (suppose it to be in another table with specs [Not in this case])
+	<b>RADAR_ID</b> | The ID of the TRAFFIC RADAR (dummy FK)
 	<b>LICENSE_PLATE</b> | Vehicle identification plate;
 	<b>VEHICLE_MAKE</b> | Vehicle make;
 	<b>VEHICLE_MODEL</b> | Vehicle model;
