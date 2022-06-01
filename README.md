@@ -1,0 +1,1 @@
+# docker-incremental-full-stategy-postgresql
