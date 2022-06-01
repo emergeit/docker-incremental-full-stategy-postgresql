@@ -1,0 +1,79 @@
+version: '3.1'
+
+services:
+
+  db:
+    container_name: pgdb
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: superTest
+    volumes:
+        - ./queries/db.sql:/docker-entrypoint-initdb.d/db.sql
+
+  adminer:
+    container_name: pgadmin
+    image: adminer
+    restart: always
+    ports:
+      - 33380:8080
+
+  python3-app:
+    container_name: python3-app
+    image: python:3.8-alpine3.14
+    tty: true
+    environment:
+      POSTGRES_DATABASE_USER: postgres
+      POSTGRES_PASSWORD: superTest
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: postgres
+      POSTGRES_TABLE: source.tb_radar
+    depends_on:
+      - db
+    volumes:
+        - ./:/app
+    command:
+          - /bin/sh
+          - -c
+          - |
+              pip install --upgrade pip
+              pip install -r /app/requirements.txt
+              python3 /app/code/feedDb.py --qtd 10000 --debug True;
+              while true; do python3 /app/code/feedDb.py --qtd 10000 --debug True; sleep 300; done;
+              sh
+
+  python3-airflow:
+    container_name: python3-airflow
+    image: python:3.8-slim-buster
+    tty: true
+    ports:
+      - "8081:8080"
+    volumes:
+        - ./dags:/app/airflow/dags
+        # - ./credentials.json:/home/credentials.json
+    command:
+          - /bin/sh
+          - -c
+          - |
+              mkdir -p /app/airflow
+              touch /app/airflow/app.log
+              pip install --upgrade pip
+              apt update -y; apt install procps net-tools iputils-ping traceroute -y
+              pip install virtualenv apache-airflow apache-airflow-providers-postgres
+              echo 'Instalação concluida com SUCESSO.'
+              airflow standalone >> /app/airflow/app.log 2>&1 &
+              sleep 20; airflow connections delete postgres_default
+              airflow connections add postgres_default --conn-type email --conn-login postgres --conn-password superTest --conn-host db --conn-port 5432
+              airflow users create --role Admin --username airflow --email airflow@airflow --firstname airflow --lastname airflow --password superTest
+              sh
+            # export GOOGLE_APPLICATION_CREDENTIALS=/home/credentials.json
+    environment:
+        AIRFLOW_HOME: /app/airflow
+        AIRFLOW__CORE__FERNET_KEY: ''
+        AIRFLOW__WEBSERVER__AUTHENTICATE: 'false'
+        AIRFLOW__WEBSERVER__RBAC: 'false'
+        AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
+        AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
