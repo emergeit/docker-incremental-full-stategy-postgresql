@@ -1,4 +1,4 @@
-# Incremental and Full Data Orchestration with:
+# Incremental and Full strategies to data orchestration with:
 
 Apache Airflow <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3EBBk3qLHKH6OVNKK7jtfe-cHnrgQFYqv0g&usqp=CAU" alt="Airflow" width="32" height="32"/> | Docker <img src="https://www.rorymon.com/blog/wp-content/uploads/2016/10/large_v-trans.png" alt="Docker" width="32" height="32"/> | PostgreSQL <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png" alt="PostgreSQL" width="32" height="32"/> | Python <img src="https://aumoraes.com/blog/wp-content/uploads/2021/09/python_original_logo.png" alt="Python" width="32" height="32"/>
 ------- | ------- | ------- | -------
@@ -17,7 +17,7 @@ Apache Airflow <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT
 You should access the container with docker exec -ti python3-app sh in linux or simply click on access container in Docker for Windows (++ winpty docker exec -ti python3-app sh).
 
 To run the feed process, run: 
-```python
+```sh
 python3 /app/code/feedDb.py
 ```
 
