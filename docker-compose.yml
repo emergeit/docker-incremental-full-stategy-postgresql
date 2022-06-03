@@ -40,7 +40,7 @@ services:
               pip install --upgrade pip
               pip install -r /app/requirements.txt
               python3 /app/code/feedDb.py --qtd 10000 --debug True;
-              while true; do python3 /app/code/feedDb.py --qtd 10000 --debug True; sleep 300; done;
+              while true; do sleep 150; python3 /app/code/feedDb.py --qtd 10000 --debug True; sleep 150; done;
               sh
 
   python3-airflow:
