@@ -14,7 +14,7 @@ from dateutil.relativedelta import *
 from dependencies.scripts import getIncrementalStrategy, readFile
 
 default_args = {
-    'owner': 'Athena Saude',
+    'owner': 'Emerge IT',
     'depends_on_past': False,
     'retries': 0,
     'email_on_failure': False,
